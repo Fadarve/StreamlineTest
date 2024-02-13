@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "Player/TP_CustomPC.h"
 
 UTP_GravityGunComponent::UTP_GravityGunComponent()
 {
@@ -64,7 +65,7 @@ void UTP_GravityGunComponent::PickDrop()
 	if(!bIsHoldingItem)
 	{
 		//PickUp if Launchable
-		if(ALaunchableActor* LaunchActor = Cast<ALaunchableActor>(Character->GetCurrentIntActor()))
+		if(ALaunchableActor* LaunchActor = Cast<ALaunchableActor>(Character->GetPC()->GetCurrentIntActor()))
 		{
 			CalculateHoldLocation();
 			LaunchActor->AttachToWeapon(this);

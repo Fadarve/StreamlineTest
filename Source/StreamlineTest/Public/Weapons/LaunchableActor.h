@@ -64,4 +64,8 @@ protected:
 	
 	//Defined in BPs, custom interaction per object
 	virtual void Interact(ATP_CustomCharacter* character) override;
+
+	//Sets the interaction message based on player state
+	UFUNCTION(BlueprintImplementableEvent)
+	void DecideInteractionMessage();
 };

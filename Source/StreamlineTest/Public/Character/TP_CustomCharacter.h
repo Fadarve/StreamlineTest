@@ -10,6 +10,7 @@
 #include "TP_CustomCharacter.generated.h"
 
 class UInputAction;
+class ATP_CustomPC;
 /**
  * 
  */
@@ -46,16 +47,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Dash)
 	float DashDelay;
 
-	//Interactible actors reference to manage on screen messages
-	IInteractInterface* CurrentIntActor;
-	IInteractInterface* LastIntActor;
-
-	//Max interaction distance from camera, determines raycast lenght
-	UPROPERTY(EditDefaultsOnly)
-	float CameraTraceDistance;
-	
 private:
 	bool bHasJectpack;
+
+	ATP_CustomPC* PC;
 public:
 	//Constructor
 	ATP_CustomCharacter();
@@ -63,15 +58,13 @@ public:
 	bool GetHasJetPack() const {return bHasJectpack;}
 
 	void SetHasJetPack(bool value) {bHasJectpack = value; }
-	
-	IInteractInterface* GetCurrentIntActor() const { return CurrentIntActor;}
+
+	ATP_CustomPC* GetPC() const {return PC;}
+	void SetPC(ATP_CustomPC* PcRef) {PC = PcRef;}
 	
 protected:
 	//Overriden function to add the dash input action
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
-	//Tick override used to check for interactible actors
-	virtual void Tick(float DeltaSeconds) override;
 
 	//Dash input action bind function
 	void Dash();
@@ -87,8 +80,4 @@ protected:
 	void DashLoop(FVector DashDir) const;
 	
 	void Interact();
-
-private:
-	//Creates a raycast and check for interactible actors
-	void CameraTrace();
 };

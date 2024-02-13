@@ -7,10 +7,11 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "Player/TP_CustomPC.h"
 
 ATP_CustomCharacter::ATP_CustomCharacter()
 {
-	CurrentIntActor = LastIntActor = nullptr;
+	//CurrentIntActor = LastIntActor = nullptr;
 	bHasJectpack = false;
 }
 
@@ -25,24 +26,6 @@ void ATP_CustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		//Interact
 		EnhancedInputComponent->BindAction(InteractAction,ETriggerEvent::Triggered,this,&ATP_CustomCharacter::Interact);
 	}
-}
-
-void ATP_CustomCharacter::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-	CameraTrace();
-}
-
-void ATP_CustomCharacter::CameraTrace()
-{
-	FHitResult CameraHit;
-	const FVector TraceStart = GetFirstPersonCameraComponent()->GetComponentLocation();
-	const FVector TraceEnd = TraceStart + (GetFirstPersonCameraComponent()->GetForwardVector()*CameraTraceDistance);
-	
-	GetWorld()->LineTraceSingleByChannel(CameraHit,TraceStart,TraceEnd,ECC_Visibility);
-
-	LastIntActor = CurrentIntActor;
-	CurrentIntActor = Cast<IInteractInterface>(CameraHit.GetActor());
 }
 
 void ATP_CustomCharacter::Dash()
@@ -82,12 +65,18 @@ void ATP_CustomCharacter::DashLoop(FVector DashDirection) const
 
 void ATP_CustomCharacter::Interact()
 {
-	if(CurrentIntActor == nullptr)
-	{
-		return;
-	}
+	const FString Message = "Interaction action called";
 
-	CurrentIntActor->Interact(this);
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1,0.5f,FColor::Purple,FString::Printf(TEXT("%s"),*Message));
+	}
+	
+	if(PC->GetCurrentIntActor() != nullptr)
+	{
+		PC->GetCurrentIntActor()->Interact(this);
+	}
+	
 }
 
 

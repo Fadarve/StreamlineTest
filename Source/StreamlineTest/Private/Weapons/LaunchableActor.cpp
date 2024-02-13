@@ -27,6 +27,7 @@ void ALaunchableActor::BeginPlay()
 //Called when focused by player
 FString ALaunchableActor::GetInteractMessage()
 {
+	DecideInteractionMessage();
 	return InteractionMessage;
 }
 
