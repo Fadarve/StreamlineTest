@@ -34,12 +34,7 @@ void ATP_CustomPC::CameraTrace()
 	const FVector TraceStart = Character->GetFirstPersonCameraComponent()->GetComponentLocation();
 	const FVector TraceEnd = TraceStart + (Character->GetFirstPersonCameraComponent()->GetForwardVector()*CameraTraceDistance);
 	
-	const FName TraceTag("MyTraceTag");
-	GetWorld()->DebugDrawTraceTag = TraceTag;
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.TraceTag = TraceTag;
-	
-	GetWorld()->LineTraceSingleByChannel(CameraHit,TraceStart,TraceEnd,ECC_Visibility,CollisionParams);
+	GetWorld()->LineTraceSingleByChannel(CameraHit,TraceStart,TraceEnd,ECC_Visibility);
 
 	LastIntActor = CurrentIntActor;
 	CurrentIntActor = Cast<IInteractInterface>(CameraHit.GetActor());
