@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Player/TP_CustomPlayerState.h"
 
 // Sets default values for this component's properties
 UTP_WeaponComponent::UTP_WeaponComponent()
@@ -79,6 +80,11 @@ void UTP_WeaponComponent::AttachWeapon(ATP_CustomCharacter* TargetCharacter)
 	// switch bHasRifle so the animation blueprint can switch to another animation set
 	Character->SetHasRifle(true);
 
+	if (ATP_CustomPlayerState* PlayerState = Cast<ATP_CustomPlayerState>(Character->GetPlayerState()))
+	{
+		PlayerState->SetHasRifle(true);
+	}
+	
 	// Set up action bindings
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
 	{

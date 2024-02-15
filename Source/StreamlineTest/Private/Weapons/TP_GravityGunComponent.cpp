@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
 #include "Player/TP_CustomPC.h"
+#include "Player/TP_CustomPlayerState.h"
 
 UTP_GravityGunComponent::UTP_GravityGunComponent()
 {
@@ -24,10 +25,17 @@ void UTP_GravityGunComponent::AttachWeapon(ATP_CustomCharacter* TargetCharacter)
 	// Attach the weapon to the First Person Character
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
 	AttachToComponent(Character->GetMesh1P(), AttachmentRules, FName(TEXT("GripPoint")));
+
+	
 	
 	// switch bHasRifle so the animation blueprint can switch to another animation set
 	Character->SetHasRifle(true);
-
+	
+	if (ATP_CustomPlayerState* PlayerState = Cast<ATP_CustomPlayerState>(Character->GetPlayerState()))
+	{
+		PlayerState->SetHasGravGun(true);
+	}
+	
 	// Set up action bindings
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
 	{
@@ -56,6 +64,7 @@ void UTP_GravityGunComponent::Fire()
 		const FVector ShootDirection = Character->GetFirstPersonCameraComponent()->GetForwardVector();
 		HoldingItem->DetachFromGun();
 		HoldingItem->MeshComponent->AddImpulse(ShootDirection*ShootForce);
+		
 	}
 }
 
@@ -71,6 +80,11 @@ void UTP_GravityGunComponent::PickDrop()
 			LaunchActor->AttachToWeapon(this);
 			bIsHoldingItem = true;
 			HoldingItem = LaunchActor;
+
+			if(ATP_CustomPC* PlayerController = Cast<ATP_CustomPC>(Character->GetController()))
+			{
+				PlayerController->HideInteractionMessage();
+			}
 		}
 	}else
 	{

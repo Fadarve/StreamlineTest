@@ -23,7 +23,7 @@ public:
 	TObjectPtr<UStaticMeshComponent> MeshComponent;
 protected:
 	//The message that will be displayed when the object is focused
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString InteractionMessage;
 
 	/*
@@ -38,6 +38,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UTP_GravityGunComponent* GetHolderComponent() const {return HolderComponent;}
 
 	/*
 	FTransform GetGunHoldTransform() const { return GunHoldTransform;}

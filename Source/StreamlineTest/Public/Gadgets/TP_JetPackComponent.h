@@ -19,16 +19,28 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RechargeFuel(float amount);
 
+	UFUNCTION(BlueprintCallable)
+	void SetStartFuelAmount(float fuel){StartFuelAmount = fuel;}
+
 	/** Attaches the actor to a FirstPersonCharacter */
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void AttachJetPack(ATP_CustomCharacter* TargetCharacter);
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 private:
+	
+	void ActivateJP();
 
-	void Fly();
+	void StartEngine();
+
+	void StopEngine();
+
+	UFUNCTION(BlueprintCallable)
+	void DeActivateJP();
 public:	
 
 	/** Sound to when activated */
@@ -45,24 +57,46 @@ public:
 
 	/** Fly Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	class UInputAction* FlyAction;
+	class UInputAction* StartJetPAckAction;
+
+	/** Propel Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	class UInputAction* PropelAction;
 	
 protected:
 	/** The Character equiped with this*/
 	ATP_CustomCharacter* Character;
 
+	//----------------Movement / Force -----------------
 	UPROPERTY(EditDefaultsOnly)
 	float ImpulseForce;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float MaxFuel;
+	UPROPERTY(EditDefaultsOnly)
+	float ForceMultiplier;
 
 	UPROPERTY(EditDefaultsOnly)
+	float JetPackAirControl;
+
+	float FallingAirControl = 0.05f;
+
+	UPROPERTY(EditDefaultsOnly)
+	float MaxForce;
+
+	bool bShouldAddForce;
+
+	//-------------fuel----------------------------
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float MaxFuel;
+
+	UPROPERTY(EditAnywhere)
 	float StartFuelAmount;
 
 	UPROPERTY(BlueprintReadOnly)
 	float RemainingFuel;
+
+	UPROPERTY(EditDefaultsOnly)
+	float FuelUsedByTick;
 	
 private:
-	
+	bool bIsActive;
 };

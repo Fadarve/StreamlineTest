@@ -12,7 +12,6 @@
 ATP_CustomCharacter::ATP_CustomCharacter()
 {
 	//CurrentIntActor = LastIntActor = nullptr;
-	bHasJectpack = false;
 }
 
 void ATP_CustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -78,6 +77,7 @@ void ATP_CustomCharacter::Interact()
 	}
 	
 }
+
 
 
 

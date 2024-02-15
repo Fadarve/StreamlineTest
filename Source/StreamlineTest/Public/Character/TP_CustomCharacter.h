@@ -14,6 +14,9 @@ class ATP_CustomPC;
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterLandedDelegate,ATP_CustomCharacter*,Character);
+
 UCLASS()
 class STREAMLINETEST_API ATP_CustomCharacter : public AStreamlineTestCharacter
 {
@@ -24,6 +27,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* InteractAction;
+
+	FOnCharacterLandedDelegate LandedDelegate;
 protected:
 	//Timer handles to manage events' delays
 	FTimerHandle DashEndTimerHandle;
@@ -48,17 +53,11 @@ protected:
 	float DashDelay;
 
 private:
-	bool bHasJectpack;
-
 	ATP_CustomPC* PC;
 public:
 	//Constructor
 	ATP_CustomCharacter();
-
-	bool GetHasJetPack() const {return bHasJectpack;}
-
-	void SetHasJetPack(bool value) {bHasJectpack = value; }
-
+	
 	ATP_CustomPC* GetPC() const {return PC;}
 	void SetPC(ATP_CustomPC* PcRef) {PC = PcRef;}
 	
