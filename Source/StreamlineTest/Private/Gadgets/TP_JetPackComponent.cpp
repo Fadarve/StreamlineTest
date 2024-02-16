@@ -118,13 +118,6 @@ void UTP_JetPackComponent::StartEngine()
 	{
 		if (RemainingFuel>0.0f)
 		{
-			const FString Message = "Activated";
-
-			if(GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(-1,1.0f,FColor::Cyan,FString::Printf(TEXT("%s"),*Message));
-			}
-			
 			bShouldAddForce = true;
 			Character->GetCharacterMovement()->AirControl = JetPackAirControl;
 			OnEngineOn.Broadcast();

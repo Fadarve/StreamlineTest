@@ -89,8 +89,8 @@ void UTP_GravityGunComponent::PickDrop()
 	}else
 	{
 		//Drop the item if is holding one
-		HoldingItem->DetachFromGun();
 		bIsHoldingItem = false;
+		HoldingItem->DetachFromGun();
 		HoldingItem = nullptr;
 	}
 }
