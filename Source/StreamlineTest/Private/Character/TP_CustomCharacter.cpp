@@ -2,9 +2,7 @@
 
 
 #include "Character/TP_CustomCharacter.h"
-
 #include "EnhancedInputComponent.h"
-#include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Player/TP_CustomPC.h"
@@ -47,35 +45,31 @@ void ATP_CustomCharacter::Dash()
 	}
 }
 
+//Stops the loop of the DashLoop method
 void ATP_CustomCharacter::OnDashFinished()
 {
 	GetWorldTimerManager().ClearTimer(DashLoopTimerHandle);
 }
 
+//Set bCanDash en true after de cooldown time so the player can dash again
 void ATP_CustomCharacter::OnDashDelayFinished()
 {
 	bCanDash = true;
 }
 
+//Sets the velocity on a fixed direction and value
 void ATP_CustomCharacter::DashLoop(FVector DashDirection) const
 {
 	GetCharacterMovement()->Velocity = DashSpeed*DashDirection;
 }
 
+//Calls the interaction action of the current interactible actor in sight 
 void ATP_CustomCharacter::Interact()
 {
-	const FString Message = "Interaction action called";
-
-	if(GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1,0.5f,FColor::Purple,FString::Printf(TEXT("%s"),*Message));
-	}
-	
 	if(PC->GetCurrentIntActor() != nullptr)
 	{
 		PC->GetCurrentIntActor()->Interact(this);
 	}
-	
 }
 
 

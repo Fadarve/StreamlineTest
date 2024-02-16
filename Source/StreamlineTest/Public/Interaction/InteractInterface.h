@@ -22,10 +22,8 @@ class STREAMLINETEST_API IInteractInterface
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+	// Objects implementing this interface can be "seen" by the player and implement a custom function for interaction
 public:
-	//Declare blueprint callable on implementations
 	virtual FString GetInteractMessage() = 0;
-	//declare Blueprint implementable
 	virtual void Interact(ATP_CustomCharacter* character) = 0;
 };

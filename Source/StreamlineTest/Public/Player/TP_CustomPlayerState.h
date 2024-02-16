@@ -13,10 +13,6 @@ class UTP_GravityGunComponent;
 /**
  * 
  */
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHasRifleChanged,bool,value,UTP_WeaponComponent*,Weapon);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHasGravGunChanged,bool,value,UTP_GravityGunComponent*,Gun);
-
 UDELEGATE(BlueprintCallable)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHasJetPackChanged,bool,value,UTP_JetPackComponent*,Jetpack);
 
@@ -27,7 +23,8 @@ class STREAMLINETEST_API ATP_CustomPlayerState : public APlayerState
 
 public:
 	ATP_CustomPlayerState();
-	
+
+	//Variables to check the state of the player anywhere
 	bool GetHasRifle() const {return bHasRifle;}
 
 	bool GetHasGravGun() const {return bHasGravGun;}

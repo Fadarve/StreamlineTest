@@ -31,6 +31,7 @@ FString ALaunchableActor::GetInteractMessage()
 	return InteractionMessage;
 }
 
+//Implements the custom interaction for each objet in blueprints
 void ALaunchableActor::Interact(ATP_CustomCharacter* character)
 {
 	ManageInteraction(character);

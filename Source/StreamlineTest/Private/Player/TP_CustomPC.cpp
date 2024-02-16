@@ -4,7 +4,7 @@
 #include "Player/TP_CustomPC.h"
 #include "Camera/CameraComponent.h"
 
-//Save a reference to the character on possesion
+//Save a reference to the character on possession
 void ATP_CustomPC::AcknowledgePossession(APawn* P)
 {
 	Super::AcknowledgePossession(P);
@@ -27,6 +27,7 @@ void ATP_CustomPC::Tick(float DeltaSeconds)
 	CameraTrace();
 }
 
+//Traces a Raycast to look for interactive objects in sight
 void ATP_CustomPC::CameraTrace()
 {
 	FHitResult CameraHit;
@@ -39,32 +40,27 @@ void ATP_CustomPC::CameraTrace()
 	LastIntActor = CurrentIntActor;
 	CurrentIntActor = Cast<IInteractInterface>(CameraHit.GetActor());
 
-	// --- Interacton Messages / Optional, final ----------
+	// --- Interaction Messages ----------
 
 	/*
-	 * Casos:
-	 *	A. Last y Current Nulos
-	 *		Nada
-	 *	B. Last es null y current es valido
-	 *		Resaltar a Current
-	 *		Mostrar mensaje de current
-	 *	C. Last es valido y current es null
-	 *		Quitar resaltado a Last
-	 *		Ocultar mensaje
-	 *	D. Ambos validos y mismo valor
-	 *		Nada
-	 *	E. Ambos validos pero dif valor
-	 *		Quitar resaltado a Last y resaltar current
-	 *		Cambiar valor de mensaje
+	 * Cases:
+	 *	A. Last and Current null
+	 *		Nothing
+	 *	B. Last is null and current is valid
+	 *		Show current message
+	 *	C. Last is valid and current is null
+	 *		Hide message
+	 *	D. Both are valid and have the same value
+	 *		Nothing
+	 *	E. Both are valid but different values
+	 *		Change message value
 	 */
-
-	
 	
 	if(LastIntActor == nullptr)
 	{
 		if(CurrentIntActor != nullptr)
 		{
-			//Caso B
+			//Case B
 			HUDMessage = CurrentIntActor->GetInteractMessage();
 			UpdateHUDMessage();
 			ShowInteractionMessage();
@@ -73,14 +69,14 @@ void ATP_CustomPC::CameraTrace()
 	{
 		if(CurrentIntActor == nullptr)
 		{
-			//Caso C
+			//Case C
 			HideInteractionMessage();
 		}
 		else
 		{
 			if(CurrentIntActor != LastIntActor)
 			{
-				//Caso E
+				//Case E
 				HUDMessage = CurrentIntActor->GetInteractMessage();
 				UpdateHUDMessage();
 			}

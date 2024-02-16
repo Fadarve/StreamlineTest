@@ -6,6 +6,8 @@
 #include "Components/SceneComponent.h"
 #include "TP_JetPackComponent.generated.h"
 
+UDELEGATE(BlueprintCallable)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEngineOnOff);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class STREAMLINETEST_API UTP_JetPackComponent : public USceneComponent
@@ -16,15 +18,19 @@ public:
 	// Sets default values for this component's properties
 	UTP_JetPackComponent();
 
+	//Adds fuel/batterie to the jetpack
 	UFUNCTION(BlueprintCallable)
 	void RechargeFuel(float amount);
-
-	UFUNCTION(BlueprintCallable)
-	void SetStartFuelAmount(float fuel){StartFuelAmount = fuel;}
 
 	/** Attaches the actor to a FirstPersonCharacter */
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void AttachJetPack(ATP_CustomCharacter* TargetCharacter);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnEngineOnOff OnEngineOn;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnEngineOnOff OnEngineOff;
 
 protected:
 	// Called when the game starts
@@ -32,22 +38,24 @@ protected:
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 private:
+	//Tick enabling/disabling
 	
 	void ActivateJP();
 
+	UFUNCTION(BlueprintCallable)
+	void DeActivateJP();
+
+	//Turns on/off the jetpack
 	void StartEngine();
 
 	void StopEngine();
-
-	UFUNCTION(BlueprintCallable)
-	void DeActivateJP();
+	
 public:	
-
-	/** Sound to when activated */
+	/** Sound to play when activated */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
 	USoundBase* ActiveSound;
 
-	/** Sound to when no fuel left */
+	/** Sound to play when no fuel left */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
 	USoundBase* NoFuelSound;
 
@@ -98,5 +106,6 @@ protected:
 	float FuelUsedByTick;
 	
 private:
+	//tells whether or not the jetpack should add a force to the player when pressing space
 	bool bIsActive;
 };

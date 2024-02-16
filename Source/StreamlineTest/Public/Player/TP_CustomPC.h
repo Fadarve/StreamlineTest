@@ -25,6 +25,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	float CameraTraceDistance;
 
+	//The message that should be displayed on screen
 	UPROPERTY(BlueprintReadOnly)
 	FString HUDMessage;
 	

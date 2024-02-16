@@ -25,12 +25,7 @@ protected:
 	//The message that will be displayed when the object is focused
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString InteractionMessage;
-
-	/*
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FTransform GunHoldTransform;
-	*/
-
+	
 	//A reference to the Weapon holding this item
 	UPROPERTY(BlueprintReadWrite)
 	UTP_GravityGunComponent* HolderComponent;
@@ -39,12 +34,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
 	UTP_GravityGunComponent* GetHolderComponent() const {return HolderComponent;}
-
-	/*
-	FTransform GetGunHoldTransform() const { return GunHoldTransform;}
-	*/
-
+	
 	//Defined in BPs, used to attach to the weapon disabling physics
 	UFUNCTION(BlueprintImplementableEvent)
 	void AttachToWeapon(UTP_GravityGunComponent* GravGunComponent);

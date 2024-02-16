@@ -11,6 +11,7 @@ ATP_CustomPlayerState::ATP_CustomPlayerState()
 	bHasJetPack = false;
 }
 
+//This delegate is used to notify the interface and show the jetpack UI
 void ATP_CustomPlayerState::SetHasJetPack(bool value, UTP_JetPackComponent* Jetpack)
 {
 	bHasJetPack = value;

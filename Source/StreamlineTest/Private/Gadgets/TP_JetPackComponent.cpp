@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/TP_CustomPlayerState.h"
 #include "StreamlineTest/Public/Character/TP_CustomCharacter.h"
+#include "StreamlineTest/Public/Weapons/LaunchableActor.h"
 
 // Sets default values for this component's properties
 UTP_JetPackComponent::UTP_JetPackComponent()
@@ -28,10 +29,11 @@ void UTP_JetPackComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	if(bShouldAddForce)
+	if(bShouldAddForce && RemainingFuel>0.0f)
 	{
-		
 		const float appliedForce = ImpulseForce*ForceMultiplier*DeltaTime*DeltaTime;
+		
+		//Avoid the player to keep accelerating beyond the max speed limit
 		if(appliedForce>MaxForce)
 		{
 			Character->GetCharacterMovement()->AddForce(MaxForce*FVector::UpVector);
@@ -72,7 +74,6 @@ void UTP_JetPackComponent::AttachJetPack(ATP_CustomCharacter* TargetCharacter)
 	
 	// Attach the jetpack to the First Person Character
 	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, false);
-	//AttachToComponent(Character->GetMesh1P(), AttachmentRules);
 	GetOwner()->AttachToComponent(Character->GetMesh1P(), AttachmentRules,FName(TEXT("JetPackSocket")));
 	
 	// switch bHasJetPack
@@ -92,7 +93,7 @@ void UTP_JetPackComponent::AttachJetPack(ATP_CustomCharacter* TargetCharacter)
 
 		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
 		{
-			// Start flying mode
+			// Start flying mode, called when the player press space after jumping
 			EnhancedInputComponent->BindAction(StartJetPAckAction, ETriggerEvent::Triggered, this, &UTP_JetPackComponent::ActivateJP);
 
 			//Add force once on air
@@ -104,29 +105,39 @@ void UTP_JetPackComponent::AttachJetPack(ATP_CustomCharacter* TargetCharacter)
 	}
 }
 
-
-void UTP_JetPackComponent::ActivateJP()
+void UTP_JetPackComponent::ActivateJP() 
 {
 	bIsActive = true;
 	SetComponentTickEnabled(true);
 }
 
+//Sets bShouldAddForce on true so the Tick method can add a force when pressing space
 void UTP_JetPackComponent::StartEngine()
 {
 	if(Character->GetCharacterMovement()->IsFalling() && bIsActive)
 	{
 		if (RemainingFuel>0.0f)
 		{
+			const FString Message = "Activated";
+
+			if(GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1,1.0f,FColor::Cyan,FString::Printf(TEXT("%s"),*Message));
+			}
+			
 			bShouldAddForce = true;
 			Character->GetCharacterMovement()->AirControl = JetPackAirControl;
+			OnEngineOn.Broadcast();
 		}
 	}
 }
 
+//Stop adding force to the player when the space key is released
 void UTP_JetPackComponent::StopEngine()
 {
 	bShouldAddForce = false;
 	Character->GetCharacterMovement()->AirControl = FallingAirControl;
+	OnEngineOff.Broadcast();
 }
 
 //Turns off the jetpack so the player can jump on ground normally without activating it

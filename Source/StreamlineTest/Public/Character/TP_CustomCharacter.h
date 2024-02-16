@@ -3,10 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Interaction/InteractInterface.h"
+#include "StreamlineTest/Public/Interaction/InteractInterface.h"
 #include "StreamlineTest/StreamlineTestCharacter.h"
-#include "Weapons/LaunchableActor.h"
-#include "Interaction/InteractInterface.h"
 #include "TP_CustomCharacter.generated.h"
 
 class UInputAction;
@@ -14,9 +12,6 @@ class ATP_CustomPC;
 /**
  * 
  */
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterLandedDelegate,ATP_CustomCharacter*,Character);
-
 UCLASS()
 class STREAMLINETEST_API ATP_CustomCharacter : public AStreamlineTestCharacter
 {
@@ -27,8 +22,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UInputAction* InteractAction;
-
-	FOnCharacterLandedDelegate LandedDelegate;
 protected:
 	//Timer handles to manage events' delays
 	FTimerHandle DashEndTimerHandle;
@@ -53,6 +46,7 @@ protected:
 	float DashDelay;
 
 private:
+	//Player controller managing the interactions
 	ATP_CustomPC* PC;
 public:
 	//Constructor
